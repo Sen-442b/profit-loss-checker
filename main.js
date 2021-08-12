@@ -57,8 +57,7 @@ function getSearchData(keyword){
         if(keyword.includes(',')){
         const keywordArr = keyword.split(',');
         const symbol =keywordArr[1].trim(); // trim removes whitespace 
-        
-         console.log("beuh");
+
          getTimeSeriesData(symbol, requestOptions);
         }
 }
@@ -86,7 +85,7 @@ setTimeout(()=>{
 
 }
 }else {
- searchResult.innerText ="No Stocks Found. Please Check for any spelling mistakes." // To be modified 
+console.log("No Stocks Found. Please Check for any spelling mistakes.") // To be modified 
 }
 
 }
@@ -95,12 +94,19 @@ setTimeout(()=>{
 function getTimeSeriesData(symbol, method ){
   console.log(typeof(symbol));
   fetch(decodeURIComponent(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${symbol}&outputsize=full&apikey=MAXZSUALDM00MSPN`),method)
-        .then(response => response.json())
+        .then(response =>{ 
+          
+        return response.json();
+        
+
+      })
         .then((data) =>{
+         
 
           console.log(data);
           dateValue = date.value
-          getStockPriceOnSpecifiedDate(data,dateValue)
+          displayStockPriceOnSpecifiedDate(data,dateValue)
+        
         })
        
         .catch(error => console.log('error', error));
@@ -110,11 +116,17 @@ console.log(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUST
 
 
 
-function getStockPriceOnSpecifiedDate(timeDate, date){
-  if(date !== undefined){
-  console.log(timeDate["Time Series (Daily)"][date])
-  date
+function displayStockPriceOnSpecifiedDate(timeDate, date){
+  purchasePrice.value="loading..."; // not working 
+ try{
+  purchasePrice.value= timeDate["Time Series (Daily)"][date]["5. adjusted close"]
+  // adjusted close price of the stock in specified date 
+  }catch{
+    purchasePrice.value="Enter a valid date "
   }
+  
+  
+
 }
 
 // you need to manipulate the DOM and add the  stock options to it 

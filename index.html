@@ -5,16 +5,23 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <main>
-        <label for="data-search"></label>
+
+        <label for="data-search">Search for the company you have invested in and then press"Enter"</label>
         <input id="search" name="data-search" list="search-results">
+   
       <datalist id="search-results" >
 
       </datalist>
-        <input id="date" type="date">
-        <input id="input-purchase"/>
+      <label for="date">Enter a date to automatically get your purchase price at a specified time </label>
+      <input id="date" type="date">
+  
+      <h2>OR</h2>
+      <label for="input-purchase">Enter a purchase price manually here </label>
+        <input id="input-purchase" placeholder="Enter Purchase Price">
         <input id="input-quantity"/>
         <input id="input-current"/>
 
