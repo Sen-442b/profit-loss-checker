@@ -3,13 +3,13 @@ const quantity  =document.getElementById('quantity');
 const currentPrice = document.getElementById('input-current');
 const searchResult = document.querySelector('#search-results');
 const date = document.getElementById("date");
+const lastUpdatedDate = document.getElementById("last-updated-date");
 
 // const BASE_URL = "https://www.alphavantage.co/query?";
 // const API_KEY  = "&apikey=MAXZSUALDM00MSPN";
-// const symbo
+
 const keywordSearch = document.getElementById('search');
 
-// MAXZSUALDM00MSPN
 currentPrice.addEventListener('click',()=>{
     let purchasePriceValue = purchasePrice.value;
     let quantityValue = quantity.value;
@@ -20,13 +20,11 @@ currentPrice.addEventListener('click',()=>{
 
 })
 
-let counter=0;
-
 keywordSearch.addEventListener('keypress',(event)=>{
 
     if(event.key==='Enter'){
-        counter++;
-    console.log(keywordSearch.value)
+  
+    console.log(keywordSearch.value);
     getSearchData(keywordSearch.value);
    
     }
@@ -35,11 +33,6 @@ keywordSearch.addEventListener('keypress',(event)=>{
 })
 
 
-fetch('https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=IBM&apikey=MAXZSUALDM00MSPN')
-.then((result)=>result.json())
-.then((data)=>console.log(data));
-// .then(data=>console.log(data));
-console.log("Sdsd");
 
 //working on search end point 
 function getSearchData(keyword){
@@ -53,7 +46,7 @@ function getSearchData(keyword){
         .then(response => response.json())
         .then(result =>{ getUserFriendlyData(result) 
         console.log(result)})
-        .catch(error => console.log('error', error));
+        .catch(error => alert('error', error, "Try again later"));
         if(keyword.includes(',')){
         const keywordArr = keyword.split(',');
         const symbol =keywordArr[1].trim(); // trim removes whitespace 
@@ -65,10 +58,7 @@ function getSearchData(keyword){
 
 
 function getUserFriendlyData(result){
-    // console.log(counter)
-    // if(counter>1){
-    // searchResult.removeChild(options);
-    // console.log(counter)}
+  
 if(result["bestMatches"].length!==0){
   
 
@@ -111,18 +101,21 @@ function getTimeSeriesData(symbol, method ){
        
         .catch(error => console.log('error', error));
 
-console.log(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${symbol}&apikey=MAXZSUALDM00MSPN`)
 }
 
 
 
 function displayStockPriceOnSpecifiedDate(timeDate, date){
   purchasePrice.value="loading..."; // not working 
+  lastUpdatedDate.innerText=timeDate["Meta Data"]["3. Last Refreshed"];
  try{
   purchasePrice.value= timeDate["Time Series (Daily)"][date]["5. adjusted close"]
   // adjusted close price of the stock in specified date 
+  currentPrice.value =timeDate["Time Series (Daily)"][timeDate["Meta Data"]["3. Last Refreshed"]]["5. adjusted close"]
+
   }catch{
     purchasePrice.value="Enter a valid date "
+    // currentPrice.value="Enter a valid date"
   }
   
   
@@ -148,3 +141,8 @@ function displayStockPriceOnSpecifiedDate(timeDate, date){
 // solve the getStockPriceOnSpecifiedDate
 
 //input the price to the price value 
+
+//last updated price to be added
+
+
+//final calculations

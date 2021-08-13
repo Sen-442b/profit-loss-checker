@@ -10,7 +10,7 @@
 <body>
     <main>
 
-        <label for="data-search">Search for the company you have invested in and then press"Enter"</label>
+        <label for="data-search">Search for the company you have invested in and then press <kbd class="key">Enter</kbd></label>
         <input id="search" name="data-search" list="search-results">
    
       <datalist id="search-results" >
@@ -18,12 +18,15 @@
       </datalist>
       <label for="date">Enter a date to automatically get your purchase price at a specified time </label>
       <input id="date" type="date">
-  
-      <h2>OR</h2>
-      <label for="input-purchase">Enter a purchase price manually here </label>
+  <button>Proceed</button>
+    
+      <label for="input-purchase">Purchase price of the stock (you can also enter the amount manually )</label>
         <input id="input-purchase" placeholder="Enter Purchase Price">
-        <input id="input-quantity"/>
-        <input id="input-current"/>
+        <label for="input-quantity">Enter  the quantity of stocks purchased </label>
+        <input id="input-quantity" type="number"/>
+        <label for="input-current">Current Price of the stock (you can enter the amount manually here as well)</label>
+        <p>Last updated on <span id="last-updated-date"></span></p>
+        <input id="input-current" type="number"/>
 
     </main>
     <script src="main.js"></script>
