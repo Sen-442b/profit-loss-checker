@@ -1,28 +1,34 @@
 const purchasePrice = document.getElementById('input-purchase');
-const quantity  =document.getElementById('quantity');
+const quantity  =document.getElementById('input-quantity');
 const currentPrice = document.getElementById('input-current');
 const searchResult = document.querySelector('#search-results');
 const date = document.getElementById("date");
 const lastUpdatedDate = document.getElementById("last-updated-date");
+const btnResult = document.getElementById("btn-result");
+const messageSmallOne = document.getElementById("one-small");
+const messageSmallTwo = document.getElementById("two-small");
+const btnCalculate = document.getElementById("btn-final");
+const message = document.getElementById("message");
+const main = document.querySelector('main');
 
 // const BASE_URL = "https://www.alphavantage.co/query?";
 // const API_KEY  = "&apikey=MAXZSUALDM00MSPN";
 
 const keywordSearch = document.getElementById('search');
 
-currentPrice.addEventListener('click',()=>{
-    let purchasePriceValue = purchasePrice.value;
-    let quantityValue = quantity.value;
-    let currentPriceValue = currentPrice.value;
-    purchasePriceValue
+// currentPrice.addEventListener('click',()=>{
+//     let purchasePriceValue = purchasePrice.value;
+//     let quantityValue = quantity.value;
+//     let currentPriceValue = currentPrice.value;
+//     purchasePriceValue
 
 
 
-})
+// })
 
 keywordSearch.addEventListener('keypress',(event)=>{
 
-    if(event.key==='Enter'){
+      if(event.key==="Enter"){
   
     console.log(keywordSearch.value);
     getSearchData(keywordSearch.value);
@@ -32,8 +38,20 @@ keywordSearch.addEventListener('keypress',(event)=>{
 
 })
 
+btnResult.addEventListener("click",()=>{
+  if( keywordSearch.value && date.value && keywordSearch.value.includes(',') ){
+ 
+      const keywordArr = keywordSearch.value.split(',');
+      const symbol =keywordArr[1].trim(); // trim removes whitespace 
 
-
+       getTimeSeriesData(symbol);
+        messageSmallTwo.innerText="loading"
+      
+    
+  }else{
+    messageSmallTwo.innerText="Make sure you have properly filled the required inputs";
+  }
+})
 //working on search end point 
 function getSearchData(keyword){
     var requestOptions = {
@@ -46,20 +64,15 @@ function getSearchData(keyword){
         .then(response => response.json())
         .then(result =>{ getUserFriendlyData(result) 
         console.log(result)})
-        .catch(error => alert('error', error, "Try again later"));
-        if(keyword.includes(',')){
-        const keywordArr = keyword.split(',');
-        const symbol =keywordArr[1].trim(); // trim removes whitespace 
-
-         getTimeSeriesData(symbol, requestOptions);
-        }
+        .catch(error => console.log(error));
+        
 }
 
 
 
 function getUserFriendlyData(result){
-  
-if(result["bestMatches"].length!==0){
+ console.log(result["bestMatches"].length)
+if(result["bestMatches"].length!==0 || keywordSearch.value.includes(',')){
   
 
 for ( let i =0;i<result["bestMatches"].length;i++){
@@ -72,18 +85,22 @@ setTimeout(()=>{
   searchResult.removeChild(options);
 },10000)
     
-
+messageSmallOne.innerText="";
 }
 }else {
-console.log("No Stocks Found. Please Check for any spelling mistakes.") // To be modified 
+messageSmallOne.innerText="No Stocks Found. Please Check for any spelling mistakes."; // To be modified 
 }
 
 }
 // date.addEventListener("click",()=>{ })
 
-function getTimeSeriesData(symbol, method ){
+function getTimeSeriesData(symbol ){
   console.log(typeof(symbol));
-  fetch(decodeURIComponent(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${symbol}&outputsize=full&apikey=MAXZSUALDM00MSPN`),method)
+  var requestOptionsTwo = {
+    method: 'GET',
+    redirect: 'follow'
+  };
+  fetch(decodeURIComponent(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${symbol}&outputsize=full&apikey=MAXZSUALDM00MSPN`),requestOptionsTwo)
         .then(response =>{ 
           
         return response.json();
@@ -92,8 +109,9 @@ function getTimeSeriesData(symbol, method ){
       })
         .then((data) =>{
          
-
-          console.log(data);
+            if(data["Note"]){
+          alert("You have exhausted all your  searches, kindly wait for a minute to use our services again");
+            }
           dateValue = date.value
           displayStockPriceOnSpecifiedDate(data,dateValue)
         
@@ -106,21 +124,54 @@ function getTimeSeriesData(symbol, method ){
 
 
 function displayStockPriceOnSpecifiedDate(timeDate, date){
-  purchasePrice.value="loading..."; // not working 
+  //purchasePrice.value="loading..."; // not working 
   lastUpdatedDate.innerText=timeDate["Meta Data"]["3. Last Refreshed"];
  try{
   purchasePrice.value= timeDate["Time Series (Daily)"][date]["5. adjusted close"]
   // adjusted close price of the stock in specified date 
   currentPrice.value =timeDate["Time Series (Daily)"][timeDate["Meta Data"]["3. Last Refreshed"]]["5. adjusted close"]
-
+ console.log(typeof(purchasePrice.value))
+messageSmallTwo.innerText="";
   }catch{
-    purchasePrice.value="Enter a valid date "
+    messageSmallTwo.innerText="Enter a valid date"
     // currentPrice.value="Enter a valid date"
   }
   
   
 
 }
+
+
+
+btnCalculate.addEventListener("click",()=>{
+const  purchasePriceValue = Number(purchasePrice.value);
+const currentPriceValue = Number( currentPrice.value);
+const quantityValue = Number( quantity.value);
+const absolute = purchasePriceValue*quantityValue -currentPriceValue*quantityValue;
+const percentage=(( currentPriceValue - purchasePriceValue) /purchasePriceValue )*100;
+if(quantityValue!==0 && purchasePriceValue!==0 && quantityValue && purchasePriceValue && currentPriceValue){
+ if(currentPriceValue<purchasePriceValue){
+   main.style.backgroundImage="linear-gradient(red,black)"
+   message.innerHTML=`You total loss is  ${absolute} and you lost ${Math.abs(percentage) } percent  📉`
+
+// console.log(absolute)
+// console.log(Math.abs(percentage),"per-")
+ } else{
+  message.innerHTML=`You total profit is  ${Math.abs(absolute)}  and you gained ${(percentage)} percent 💹`
+  main.style.backgroundImage="linear-gradient(green,black)"
+ }
+
+
+
+}
+else{
+  message.innerHTML=`Enter all the required inputs`
+}
+}
+
+)
+
+
 
 // you need to manipulate the DOM and add the  stock options to it 
 //you still need to do it 
