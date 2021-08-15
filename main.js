@@ -153,12 +153,13 @@ if(quantityValue!==0 && purchasePriceValue!==0 && quantityValue && purchasePrice
  if(currentPriceValue<purchasePriceValue){
    main.style.backgroundImage="linear-gradient(red,black)"
    message.innerHTML=`You total loss is  ${absolute} and you lost ${Math.abs(percentage) } percent  📉`
-
+   main.style.color="white";
 // console.log(absolute)
 // console.log(Math.abs(percentage),"per-")
  } else{
   message.innerHTML=`You total profit is  ${Math.abs(absolute)}  and you gained ${(percentage)} percent 💹`
   main.style.backgroundImage="linear-gradient(green,black)"
+  main.style.color="white";
  }
 
 
