@@ -151,15 +151,20 @@ const absolute = purchasePriceValue*quantityValue -currentPriceValue*quantityVal
 const percentage=(( currentPriceValue - purchasePriceValue) /purchasePriceValue )*100;
 if(quantityValue!==0 && purchasePriceValue!==0 && quantityValue && purchasePriceValue && currentPriceValue){
  if(currentPriceValue<purchasePriceValue){
+   if(Math.abs(percentage)>50){
    main.style.backgroundImage="linear-gradient(red,black)"
-   message.innerHTML=`You total loss is  ${absolute} and you lost ${Math.abs(percentage) } percent  📉`
    main.style.color="white";
+   }
+   message.innerHTML=`You total loss is  ${absolute} and you lost ${Math.abs(percentage) } percent  📉`
+   
 // console.log(absolute)
 // console.log(Math.abs(percentage),"per-")
  } else{
   message.innerHTML=`You total profit is  ${Math.abs(absolute)}  and you gained ${(percentage)} percent 💹`
+  if(percentage>50){
   main.style.backgroundImage="linear-gradient(green,black)"
   main.style.color="white";
+  }
  }
 
 
