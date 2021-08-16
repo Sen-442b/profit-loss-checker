@@ -149,7 +149,9 @@ const currentPriceValue = Number( currentPrice.value);
 const quantityValue = Number( quantity.value);
 const absolute = purchasePriceValue*quantityValue -currentPriceValue*quantityValue;
 const percentage=(( currentPriceValue - purchasePriceValue) /purchasePriceValue )*100;
-if(quantityValue!==0 && purchasePriceValue!==0 && quantityValue && purchasePriceValue && currentPriceValue){
+if(quantityValue>0 && purchasePriceValue>0 && quantityValue && purchasePriceValue && currentPriceValue){
+  main.style.background="black";
+  main.style.color="white";
  if(currentPriceValue<purchasePriceValue){
    if(Math.abs(percentage)>50){
    main.style.backgroundImage="linear-gradient(red,black)"
