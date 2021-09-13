@@ -157,12 +157,12 @@ if(quantityValue>0 && purchasePriceValue>0 && quantityValue && purchasePriceValu
    main.style.backgroundImage="linear-gradient(red,black)"
    main.style.color="white";
    }
-   message.innerHTML=`You total loss is  ${absolute} and you lost ${Math.abs(percentage) } percent  📉`
+   message.innerHTML=`You total loss is  ${absolute.toFixed(2)} and you lost ${Math.abs(percentage).toFixed(2) } percent  📉`
    
 // console.log(absolute)
 // console.log(Math.abs(percentage),"per-")
  } else{
-  message.innerHTML=`You total profit is  ${Math.abs(absolute)}  and you gained ${(percentage)} percent 💹`
+  message.innerHTML=`You total profit is  ${Math.abs(absolute).toFixed(2)}  and you gained ${(percentage.toFixed(2))} percent 💹`
   if(percentage>50){
   main.style.backgroundImage="linear-gradient(green,black)"
   main.style.color="white";
